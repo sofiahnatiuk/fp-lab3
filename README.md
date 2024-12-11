@@ -17,11 +17,22 @@
 
 ## Лістинг функції з використанням конструктивного підходу
 ```lisp
-(defun remove-seconds (lst &optional (index 1))
-  (cond
-    ((null lst) nil)
-    ((oddp index) (cons (car lst) (remove-seconds (cdr lst) (1+ index)))) 
-    (t (remove-seconds (cdr lst) (1+ index)))))
+(defun bubble-sort-functional (list)
+  (labels ((bubble-pass (lst last-index)
+             (cond
+               ((or (null lst) (null (cdr lst))) lst)
+               ((<= last-index 0) lst)
+               (t
+                (let ((head (first lst))
+                      (tail (cdr lst)))
+                  (if (> head (first tail))
+                      (cons (first tail) (bubble-pass (cons head (cdr tail)) (1- last-index)))
+                      (cons head (bubble-pass tail (1- last-index))))))))
+           (sort-helper (lst last-index)
+             (if (or (null lst) (<= last-index 0))
+                 lst
+                 (sort-helper (bubble-pass lst last-index) (1- last-index)))))
+    (sort-helper list (1- (length list)))))
 ```
 ### Тестові набори та утиліти
 ```lisp
